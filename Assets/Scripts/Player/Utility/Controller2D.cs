@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Controller2D : RayCastController
 {
-    float maxClimbAngle = 80;
-    float maxDescendAngle = 80;
+    public float maxClimbAngle = 80;
+    public float maxDescendAngle = 80;
 
     public CollisionInfo collisions;
     [HideInInspector]
@@ -26,24 +26,16 @@ public class Controller2D : RayCastController
         collisions.velocityOld = velocity;
         this.input = input;
 
-        if (velocity.x != 0) {
-            collisions.faceDir = (int)Mathf.Sign(velocity.x);
-        }
+        if (velocity.x != 0) { collisions.faceDir = (int)Mathf.Sign(velocity.x); }
 
-        if (velocity.y < 0) {
-            DescendSlope(ref velocity);
-        }
+        if (velocity.y < 0) { DescendSlope(ref velocity); }
 
         HorizontalCollisions(ref velocity);
-        if (velocity.y != 0) {
-            VerticalCollisions(ref velocity);
-        }
+        if (velocity.y != 0) { VerticalCollisions(ref velocity); }
 
         transform.Translate(velocity);
 
-        if (standingOnPlatform) {
-            collisions.below = true;
-        }
+        if (standingOnPlatform) { collisions.below = true; }
     }
 
     void HorizontalCollisions(ref Vector3 velocity) {
@@ -62,7 +54,9 @@ public class Controller2D : RayCastController
             Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
 
             if (hit) {
-                if (hit.collider.tag == "Climbable" && isPlayer) { collisions.climbable = true; } else collisions.climbable = false;
+                if (hit.collider.tag == "Climbable" && isPlayer) {
+                    collisions.climbable = true;
+                } else collisions.climbable = false;
                 if (hit.distance == 0) {
                     continue;
                 }
