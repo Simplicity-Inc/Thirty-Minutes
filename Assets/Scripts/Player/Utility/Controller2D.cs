@@ -6,7 +6,7 @@ public class Controller2D : RayCastController
     public float maxClimbAngle = 80;
     public float maxDescendAngle = 80;
 
-    public CollisionInfo collisions;
+    [ReadOnly] public CollisionInfo collisions;
     [HideInInspector]
     public Vector2 input;
     public bool isPlayer;
@@ -57,9 +57,7 @@ public class Controller2D : RayCastController
                 if (hit.collider.tag == "Climbable" && isPlayer) {
                     collisions.climbable = true;
                 } else collisions.climbable = false;
-                if (hit.distance == 0) {
-                    continue;
-                }
+                if (hit.distance == 0) { continue; }
 
                 float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 
@@ -106,12 +104,8 @@ public class Controller2D : RayCastController
 
             if (hit) {
                 if (hit.collider.tag == "Through") {
-                    if (directionY == 1 || hit.distance == 0) {
-                        continue;
-                    }
-                    if (collisions.fallingThroughPlatform) {
-                        continue;
-                    }
+                    if (directionY == 1 || hit.distance == 0) { continue; }
+                    if (collisions.fallingThroughPlatform) { continue; }
                     if (input.y == -1) {
                         collisions.fallingThroughPlatform = true;
                         Invoke("ResetFallingThroughPlatform", .5f);
