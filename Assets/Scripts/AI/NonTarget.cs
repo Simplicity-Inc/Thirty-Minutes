@@ -6,7 +6,7 @@ using System.Collections;
 public class NonTarget : Agent {
     private Controller2D controller;
 	// Use this for initialization
-	void Start () {
+	public override void Start () {
         controller = GetComponent<Controller2D>();
         base.Start();
 	}
@@ -15,9 +15,6 @@ public class NonTarget : Agent {
 	void Update () {
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity, Vector2.zero);
-        if (controller.collisions.above || controller.collisions.below)
-        {
-            velocity.y = 0;
-        }
+        if (controller.collisions.above || controller.collisions.below) { velocity.y = 0; }
 	}
 }
