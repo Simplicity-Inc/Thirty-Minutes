@@ -47,7 +47,7 @@ public class Controller2D : RayCastController
         }
 
         for (int i = 0; i < horizontalRayCount; i++) {
-            Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
+            Vector2 rayOrigin = (directionX == -1) ? RayCastOrigins.BottomLeft : RayCastOrigins.BottomRight;
             rayOrigin += Vector2.up * (horizontalRaySpacing * i);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
 
@@ -98,7 +98,7 @@ public class Controller2D : RayCastController
 
         for (int i = 0; i < verticalRayCount; i++) {
 
-            Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
+            Vector2 rayOrigin = (directionY == -1) ? RayCastOrigins.BottomLeft : RayCastOrigins.TopLeft;
             rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
 
@@ -135,7 +135,7 @@ public class Controller2D : RayCastController
         if (collisions.climbingSlope) {
             float directionX = Mathf.Sign(velocity.x);
             rayLength = Mathf.Abs(velocity.x) + skinWidth;
-            Vector2 rayOrigin = ((directionX == -1) ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight) + Vector2.up * velocity.y;
+            Vector2 rayOrigin = ((directionX == -1) ? RayCastOrigins.BottomLeft : RayCastOrigins.BottomRight) + Vector2.up * velocity.y;
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
 
             if (hit) {
@@ -163,7 +163,7 @@ public class Controller2D : RayCastController
 
     void DescendSlope(ref Vector3 velocity) {
         float directionX = Mathf.Sign(velocity.x);
-        Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomRight : raycastOrigins.bottomLeft;
+        Vector2 rayOrigin = (directionX == -1) ? RayCastOrigins.BottomRight : RayCastOrigins.BottomLeft;
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, Mathf.Infinity, collisionMask);
 
         if (hit) {
