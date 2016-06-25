@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Agent : MonoBehaviour {
 
-    protected float gravity;
+    [HideInInspector] public float gravity;
     public float moveSpeed = 6;
     public float maxJumpHeight = 4;
     public float minJumpHeight = 1;

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class ComparisonNode : BaseInputNode {
 
-    private ComparisonType compType;
+    private ComparisonType _compType;
     public enum ComparisonType {
         Greater, Less, Equal
     }
@@ -24,7 +24,7 @@ public class ComparisonNode : BaseInputNode {
         base.DrawWindow();
 
         Event e = Event.current;
-        compType = (ComparisonType)EditorGUILayout.EnumPopup("Comparison Type", compType);
+        _compType = (ComparisonType)EditorGUILayout.EnumPopup("Comparison Type", _compType);
 
         string input1Title = "None";
         if(input1) input1Title = input1.getResult();
@@ -59,7 +59,7 @@ public class ComparisonNode : BaseInputNode {
         }
         string result = "false";
 
-        switch(compType) {
+        switch(_compType) {
             case ComparisonType.Equal: if(input1Value == input2Value) result = "true"; break;
             case ComparisonType.Greater: if(input1Value > input2Value) result = "true"; break;
             case ComparisonType.Less: if(input1Value < input2Value) result = "true"; break;

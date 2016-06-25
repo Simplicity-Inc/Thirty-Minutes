@@ -26,19 +26,16 @@ public class RayCastController : MonoBehaviour {
     /// <summary>
     /// The spacing CalculateRaySpacing() determines for the horizontal rays
     /// </summary>
-    [HideInInspector]
-    public float horizontalRaySpacing;
+    [HideInInspector] public float horizontalRaySpacing;
     /// <summary>
     /// The spacing CalculateRaySpacing() determines for the vertical rays
     /// </summary>
-    [HideInInspector]
-    public float verticalRaySpacing;
-
+    [HideInInspector] public float verticalRaySpacing;
+    
     /// <summary>
     /// The private member for the object's collider
     /// </summary>
-    [HideInInspector]
-    private BoxCollider2D _collider;
+    [HideInInspector] private BoxCollider2D _collider;
     /// <summary>
     /// The Getter/Setter for the object's collider
     /// </summary>
@@ -58,12 +55,26 @@ public class RayCastController : MonoBehaviour {
         set { _raycastOrigins = value; }
     }
 
-    public virtual void Awake() { Collider = GetComponent<BoxCollider2D>(); }
+    public virtual void Awake() {
+        if(( Collider = GetComponent<BoxCollider2D>() ) == null)
+            Debug.LogWarning("Collider for " 
+                            + this.gameObject.name 
+                            + " failed to get component");
+    }
     public virtual void Start() { CalculateRaySpacing(); }
 
+    /// <summary>
+    /// Updates where the rays are being shot from
+    /// </summary>
     public void UpdateRaycastOrigins() {
         // Get the bounds of the collider
         Bounds bounds = Collider.bounds;
+        if(bounds == null) {
+            Debug.LogError("Ray Cast Controller doesn't have the bounds of the collider for " 
+                          + this.gameObject.name);
+            UnityEditor.EditorApplication.isPlaying = false;
+        }
+            
         // Shrink the bounds by twice the skinWidth
         bounds.Expand(skinWidth * -2);
         // Set the ray cast points
@@ -73,6 +84,9 @@ public class RayCastController : MonoBehaviour {
                                            , new Vector2(bounds.max.x, bounds.min.y));
     }
 
+    /// <summary>
+    /// Calculates the space between each ray
+    /// </summary>
     public void CalculateRaySpacing() {
         // Get the bounds of the collider
         Bounds bounds = Collider.bounds;
@@ -86,6 +100,9 @@ public class RayCastController : MonoBehaviour {
         verticalRaySpacing = bounds.size.x / ( verticalRayCount - 1 );
     }
 
+    /// <summary>
+    /// Holds the positions of the ray cast
+    /// </summary>
     public struct RaycastOrigins {
         // The constructor to the set the points
         public RaycastOrigins(Vector2 topLeft, Vector2 topRight, Vector2 bottomLeft, Vector2 bottomRight) {

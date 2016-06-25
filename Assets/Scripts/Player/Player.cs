@@ -10,6 +10,9 @@ public class Player : Agent
 
     public float wallSlideSpeedMax = 3;
     public float wallStickTime = .25f;
+
+    [HideInInspector] public Vector2 input = Vector2.zero;
+
     float timeToWallUnstick;
     
     float velocityXSmoothing;
@@ -24,7 +27,7 @@ public class Player : Agent
     }
 
     void Update() {
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         int wallDirX = (controller.collisions.left) ? -1 : 1;
 
         float targetVelocityX = input.x * moveSpeed;
@@ -69,7 +72,7 @@ public class Player : Agent
         }
 
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime, input);
+        controller.Move(velocity * Time.deltaTime, input); // HERE
 
         if (controller.collisions.above || controller.collisions.below) { velocity.y = 0; }
     }
