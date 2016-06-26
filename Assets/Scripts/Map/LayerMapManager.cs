@@ -3,60 +3,75 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LayerMapManager : MonoBehaviour {
-
-    public GameObject[] mapLayers;
+    
+    public LayeredMap[] maps;
     public List<LayerMapController> entities;
     public int currentMap;
 
     void Start() {
         GameObject[] allObjects = FindObjectsOfType<GameObject>();
-        foreach(GameObject go in allObjects) {
-            if(go.GetComponent<LayerMapController>()) {
+        foreach(GameObject go in allObjects) 
+            if(go.GetComponent<LayerMapController>())
                 entities.Add(go.GetComponent<LayerMapController>());
-            }
-        }
+
+        for(int i = 0; i < maps.Length; ++i) maps[i].Setup();
+
     }
 
     void Update() {
-        HandleMaps();
-        DrawFocusMap();
-    }
+        foreach(LayerMapController l in entities)
+            if(l.isPlayer)
+                currentMap = l.currentLayer;
 
-    public void AddToMap(LayerMapController controller) {
-        entities.Add(controller);
-    }
+        // Scan through maps to find if their layer is less than current map
+        // If so, toggle both to false
+        // If their layer is greater toggle colliders to false and renderers to true
+        // Finally if it is the current layer turn both true
 
-    void ChangeLayer(LayerMapController controller, int layer) {
-        if(entities.Contains(controller) && controller.currentLayer != layer) {
-            controller.currentLayer = layer;
-        }
-    }
-
-    void DrawFocusMap() { FullActiveMap(currentMap); }
-
-    void HandleMaps() {
-        for(int i = 0; i < mapLayers.Length; ++i) {
-            if(i < currentMap) { FullDeactiveMap(i);
-            } else if(i > currentMap) { HalfDeactiveMap(i);
+        for(int i = 0; i < maps.Length; ++i) {
+            if(i < currentMap) { 
+                maps[i].ToggleColliders(false);
+                maps[i].ToggleMesh(false);
+            } else if(i > currentMap) {
+                maps[i].ToggleColliders(false);
+                maps[i].ToggleMesh(true);
+            } else if(i == currentMap) {
+                maps[i].ToggleColliders(true);
+                maps[i].ToggleMesh(true);
             }
         }
     }
 
-    void FullActiveMap(int i) {
-        mapLayers[i].SetActive(true);
-        BoxCollider2D[] colliders = mapLayers[i].GetComponentsInChildren<BoxCollider2D>();
-        for(int c = 0; c < colliders.Length; ++c) colliders[c].enabled = true;
-    }
+    [System.Serializable]
+    public class LayeredMap {
+        public GameObject parent;
 
-    void HalfActiveMap(int i) {
+        public List<MeshRenderer> meshes;
+        public List<BoxCollider2D> colliders;
+        public int layer;
 
-    }
+        public void Setup() {
+            meshes = new List<MeshRenderer>();
+            colliders = new List<BoxCollider2D>();
 
-    void FullDeactiveMap(int i) {
-        mapLayers[i].SetActive(false);
-    }
-    void HalfDeactiveMap(int i) {
-        BoxCollider2D[] colliders = mapLayers[i].GetComponentsInChildren<BoxCollider2D>();
-        for(int c = 0; c < colliders.Length; ++c) colliders[c].enabled = false;
+            List<GameObject> gs = new List<GameObject>();
+            Transform[] ts = parent.GetComponentsInChildren<Transform>();
+            foreach(Transform t in ts) 
+                if(t != null && t.gameObject != null) gs.Add(t.gameObject);
+
+            foreach(GameObject child in gs) {
+                if(child.GetComponent<MeshRenderer>()) meshes.Add(child.GetComponent<MeshRenderer>());
+                if(child.GetComponent<BoxCollider2D>()) colliders.Add(child.GetComponent<BoxCollider2D>());
+            }
+        }
+
+        public void ToggleMesh(bool state) {
+            foreach(MeshRenderer m in meshes)
+                m.enabled = state;
+        }
+        public void ToggleColliders(bool state) {
+            foreach(BoxCollider2D b in colliders)
+                b.enabled = state;
+        }
     }
 }
