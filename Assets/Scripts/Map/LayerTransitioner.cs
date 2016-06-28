@@ -27,4 +27,9 @@ public class LayerTransitioner : MonoBehaviour {
     void OnTriggerExit2D(Collider2D other) {
         controller = null;
     }
+
+    void OnDrawGizmos() {
+        Gizmos.color = new Color(0, 1, 0, .5f);
+        Gizmos.DrawCube(gameObject.transform.position, gameObject.transform.localScale);
+    }
 }

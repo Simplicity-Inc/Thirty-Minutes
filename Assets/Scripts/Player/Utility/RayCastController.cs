@@ -12,16 +12,17 @@ public class RayCastController : MonoBehaviour {
     /// We need this so when we are standing on something we still collide with it
     /// </summary>
     public const float skinWidth = .015f;
+    const float dstBetweenRays = .25f;
     /// <summary>
     /// The amount of rays that we shoot out to the side depending on which way we are moving -
     /// They are spaced evenly acrossed object using CalculateRaySpacing()
     /// </summary>
-    public int horizontalRayCount = 4;
+    [HideInInspector] public int horizontalRayCount;
     /// <summary>
     /// The amount of rays that we shoot out up and down depend on which way we are moving -
     /// They are spaced evenly acrossed object using CalculateRaySpacing()
     /// </summary>
-    public int verticalRayCount = 4;
+    [HideInInspector] public int verticalRayCount;
 
     /// <summary>
     /// The spacing CalculateRaySpacing() determines for the horizontal rays
@@ -61,6 +62,7 @@ public class RayCastController : MonoBehaviour {
                             + this.gameObject.name 
                             + " failed to get component");
     }
+
     public virtual void Start() { CalculateRaySpacing(); }
 
     /// <summary>
@@ -92,6 +94,13 @@ public class RayCastController : MonoBehaviour {
         Bounds bounds = Collider.bounds;
         // Shrink the bounds by twice the skinWidth
         bounds.Expand(skinWidth * -2);
+
+        float boundsWidth = bounds.size.x;
+        float boundsHeight = bounds.size.y;
+
+        horizontalRayCount = Mathf.RoundToInt(boundsHeight / dstBetweenRays);
+        verticalRayCount = Mathf.RoundToInt(boundsWidth / dstBetweenRays);
+
         // Make sure we always have at least to rays for the corners
         horizontalRayCount = Mathf.Clamp(horizontalRayCount, 2, int.MaxValue);
         verticalRayCount = Mathf.Clamp(verticalRayCount, 2, int.MaxValue);

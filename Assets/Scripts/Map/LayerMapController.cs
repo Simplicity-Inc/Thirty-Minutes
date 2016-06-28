@@ -9,7 +9,7 @@ public class LayerMapController : MonoBehaviour {
     public bool tryToTravers = false;
 
     void Update() {
-        if(Input.GetKeyDown(KeyCode.W)) tryToTravers = true;
+        if(Input.GetKeyDown(KeyCode.W) && isPlayer) tryToTravers = true;
         else tryToTravers = false;
     }
 }
