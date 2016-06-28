@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class LayerTransitioner : MonoBehaviour {
@@ -7,25 +8,29 @@ public class LayerTransitioner : MonoBehaviour {
     public int forwardLayer = 0;
     public int backLayer = 1;
 
-    private LayerMapController controller;
+    private List<LayerMapController> controller;
+
+    void Start() {
+        controller = new List<LayerMapController>();
+    }
 
     void Update() {
-        if(controller != null)
-            if(controller.isPlayer && controller.tryToTravers) {
-                controller.currentLayer = ( controller.currentLayer == forwardLayer )
-                                                ? backLayer : forwardLayer;
-                controller.tryToTravers = false;
-            }
+        foreach(LayerMapController obj in controller)
+            if(obj != null)
+                if(obj.tryToTravers) {
+                    obj.currentLayer = ( obj.currentLayer == forwardLayer ) ? backLayer : forwardLayer;
+                    obj.tryToTravers = false;
+                }
 
     }
 
     void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.GetComponent<LayerMapController>())
-            controller = other.gameObject.GetComponent<LayerMapController>();
+            controller.Add(other.GetComponent<LayerMapController>());
     }
 
     void OnTriggerExit2D(Collider2D other) {
-        controller = null;
+        controller.Remove(other.gameObject.GetComponent<LayerMapController>());
     }
 
     void OnDrawGizmos() {
