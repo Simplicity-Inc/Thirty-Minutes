@@ -18,7 +18,7 @@ public class PlatformController : RayCastController
     public float easeAmount;
 
     int fromWaypointIndex;
-    float percentBetweenWaypoints;
+    protected float percentBetweenWaypoints;
     float nextMoveTime; 
 
     List<PassengerMovement> passengerMovement;
@@ -37,7 +37,7 @@ public class PlatformController : RayCastController
         }
     }
 
-    void Update()
+    protected void Update()
     {
         UpdateRaycastOrigins();
 

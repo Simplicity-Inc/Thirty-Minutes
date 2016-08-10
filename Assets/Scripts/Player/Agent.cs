@@ -11,6 +11,9 @@ public class Agent : MonoBehaviour {
     protected float accelerationTimeAirborne = .2f;
     protected float accelerationTimeGrounded = .1f;
 
+    protected int desiredFloor;
+    public int currentFloor;
+
     protected float maxJumpVelocity;
     protected float minJumpVelocity;
     protected Vector3 velocity;
