@@ -74,18 +74,7 @@ public class AiBase : Agent {
                         MoveTo(target.position);
                         if (CheckXDis(target,transform) < .4)
                         {
-                            //play the animation and check if its trapped
-                            //animation.Play("clip");
-                            //yield WaitForSeconds(animation["clip"].length * animation["clip"].speed);
-                            if (target.GetComponent<Item>())
-                            {
-                                //kill the target
-                                
-                            }
-                            else
-                            {
-                                currWayPoint++;
-                            }                          
+                           
                             Debug.Log("ahhh");
                         }
                     }
@@ -93,7 +82,28 @@ public class AiBase : Agent {
                 }
         }
     }
- 
+    //Needs more work
+    void InteractTest(int waitTime)
+    {
+                                
+    }
+    IEnumerator Interact()
+        {
+        //INCOMPLETE NEEDS TO WORK WITH THE ANIMATION
+        //play the animation and check if its trapped
+       // animation.Play("clip");
+        //yield return new WaitForSeconds(animation["clip"].length * animation["clip"].speed);
+        //if (target.GetComponent<Item>())
+        //{
+        //    //kill the target
+
+        //}
+        //else
+        //{
+        //    currWayPoint++;
+        //}
+        yield return new WaitForSeconds(2);
+    }
     void MoveTo(Vector3 wayPoint)
     {
         if ((currentPos.x - wayPoint.x + (size.x/2)) > .5)
