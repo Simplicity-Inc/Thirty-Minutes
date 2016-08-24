@@ -5,9 +5,11 @@ using System.Collections;
 public class PlayerInput : MonoBehaviour {
 
     Player player;
+    TimeController timeController;
 
     void Start() {
         player = GetComponent<Player>();
+        timeController = GetComponent<TimeController>();
     }
 
     void Update () {

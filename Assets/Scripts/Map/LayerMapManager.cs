@@ -15,7 +15,6 @@ public class LayerMapManager : MonoBehaviour {
                 entities.Add(go.GetComponent<LayerMapController>());
 
         for(int i = 0; i < maps.Length; ++i) maps[i].Setup();
-
     }
 
     void Update() {

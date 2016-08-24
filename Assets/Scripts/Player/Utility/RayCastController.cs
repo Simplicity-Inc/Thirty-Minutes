@@ -7,17 +7,24 @@ public class RayCastController : MonoBehaviour {
     /// The layer we detect for when finding collisions
     /// </summary>
     public LayerMask collisionMask;
+
     /// <summary>
     /// The value used for the inset of the ray -
     /// We need this so when we are standing on something we still collide with it
     /// </summary>
     public const float skinWidth = .015f;
-    const float dstBetweenRays = .25f;
+
+    /// <summary>
+    /// Used to calculate how many rays should be casted out
+    /// </summary>
+    const float dstBetweenRays = .2f;
+
     /// <summary>
     /// The amount of rays that we shoot out to the side depending on which way we are moving -
     /// They are spaced evenly acrossed object using CalculateRaySpacing()
     /// </summary>
     [HideInInspector] public int horizontalRayCount;
+
     /// <summary>
     /// The amount of rays that we shoot out up and down depend on which way we are moving -
     /// They are spaced evenly acrossed object using CalculateRaySpacing()
@@ -28,6 +35,7 @@ public class RayCastController : MonoBehaviour {
     /// The spacing CalculateRaySpacing() determines for the horizontal rays
     /// </summary>
     [HideInInspector] public float horizontalRaySpacing;
+
     /// <summary>
     /// The spacing CalculateRaySpacing() determines for the vertical rays
     /// </summary>
@@ -37,6 +45,7 @@ public class RayCastController : MonoBehaviour {
     /// The private member for the object's collider
     /// </summary>
     [HideInInspector] private BoxCollider2D _collider;
+
     /// <summary>
     /// The Getter/Setter for the object's collider
     /// </summary>
@@ -44,10 +53,12 @@ public class RayCastController : MonoBehaviour {
         get { return _collider; }
         set { _collider = value; }
     }
+
     /// <summary>
     /// The private member that holds the object's corners
     /// </summary>
     private RaycastOrigins _raycastOrigins;
+
     /// <summary>
     /// The Getter/Setter for the object's corners
     /// </summary>

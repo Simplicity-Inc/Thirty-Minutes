@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// [RequireComponent(typeof(PlatformerControllerGizmo))] Needs Fixing
 public class PlatformController : RayCastController {
     public LayerMask passengerMask;
 
     public Vector3[] localWaypoints;
-    Vector3[] globalWaypoints;
+    [HideInInspector] public Vector3[] globalWaypoints;
 
     Vector3 velocity;
 
@@ -178,13 +179,16 @@ public class PlatformController : RayCastController {
 
     void OnDrawGizmos() {
         if(localWaypoints != null) {
-            Gizmos.color = Color.red;
-            float size = .3f;
+            Bounds bounds = GetComponent<Collider2D>().bounds;
 
             for(int i = 0; i < localWaypoints.Length; i++) {
                 Vector3 globalWaypointPos = ( Application.isPlaying ) ? globalWaypoints[i] : localWaypoints[i] + transform.position;
-                Gizmos.DrawLine(globalWaypointPos - Vector3.up * size, globalWaypointPos + Vector3.up * size);
-                Gizmos.DrawLine(globalWaypointPos - Vector3.left * size, globalWaypointPos + Vector3.left * size);
+                //Gizmos.DrawLine(globalWaypointPos - Vector3.up * size, globalWaypointPos + Vector3.up * size);
+                //Gizmos.DrawLine(globalWaypointPos - Vector3.left * size, globalWaypointPos + Vector3.left * size);
+                Gizmos.color = new Color(1, 0, 0, 1);
+                Gizmos.DrawWireCube(globalWaypointPos, bounds.size);
+                Gizmos.color = new Color(1, 0, 0, .3f);
+                Gizmos.DrawCube(globalWaypointPos, bounds.size);
             }
         }
     }
