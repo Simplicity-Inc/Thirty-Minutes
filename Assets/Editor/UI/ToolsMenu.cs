@@ -27,15 +27,25 @@ public class ToolsMenu : Editor {
                     //Hide Unitys Tool handles (like the move tool) while we draw our own stuff
                     Tools.hidden = true;
                     break;
-                default:
+                case 2:
                     EditorPrefs.SetBool("IsLevelEditorEnabled", true);
-                    EditorPrefs.SetBool("SelectBlockNextToMousePosition", true);
+                    EditorPrefs.SetBool("SelectBlockNextToMousePosition", false);
+                    EditorPrefs.SetFloat("CubeHandleColorR", Color.green.r);
+                    EditorPrefs.SetFloat("CubeHandleColorG", Color.green.g);
+                    EditorPrefs.SetFloat("CubeHandleColorB", Color.green.b);
+
+                    //Hide Unitys Tool handles (like the move tool) while we draw our own stuff
+                    Tools.hidden = true;
+                    break;
+                default:
+                    EditorPrefs.SetBool("IsLevelEditorEnabled", false);
+                    EditorPrefs.SetBool("SelectBlockNextToMousePosition", false);
                     EditorPrefs.SetFloat("CubeHandleColorR", Color.yellow.r);
                     EditorPrefs.SetFloat("CubeHandleColorG", Color.yellow.g);
                     EditorPrefs.SetFloat("CubeHandleColorB", Color.yellow.b);
 
                     //Hide Unitys Tool handles (like the move tool) while we draw our own stuff
-                    Tools.hidden = true;
+                    Tools.hidden = false;
                     break;
             }
         }

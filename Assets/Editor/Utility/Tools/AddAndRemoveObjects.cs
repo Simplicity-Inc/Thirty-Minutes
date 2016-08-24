@@ -10,9 +10,12 @@ public class AddAndRemoveObjects : Editor {
     static GUIStyle style = new GUIStyle();
     static Vector2 scrollPosition;
     static int blockCount;
+    static int prevTool = 0;
     static Transform m_LevelParent;
-    public static Transform LevelParent {
-        get {
+    public static Transform LevelParent
+    {
+        get
+        {
             if(m_LevelParent == null) {
                 GameObject go = GameObject.Find("Level");
 
@@ -26,7 +29,8 @@ public class AddAndRemoveObjects : Editor {
         }
     }
 
-    public static int SelectedBlock {
+    public static int SelectedBlock
+    {
         get { return EditorPrefs.GetInt("SelectedEditorBlock", 0); }
         set { EditorPrefs.SetInt("SelectedEditorBlock", value); }
     }
@@ -107,9 +111,33 @@ public class AddAndRemoveObjects : Editor {
             }
         }
 
+
+        // Deselect tools
         if(Event.current.type == EventType.keyDown
         && Event.current.keyCode == KeyCode.Escape) {
             ToolsMenu.SelectedTool = 0;
+            prevTool = ToolsMenu.SelectedTool;
+        }
+        // Select Erase tool
+        if(Event.current.type == EventType.keyDown
+        && Event.current.keyCode == KeyCode.E) {
+            ToolsMenu.SelectedTool = 1;
+            prevTool = ToolsMenu.SelectedTool;
+        }
+        // Select Paint tool
+        if(Event.current.type == EventType.keyDown
+        && Event.current.keyCode == KeyCode.P) {
+            ToolsMenu.SelectedTool = 2;
+            prevTool = ToolsMenu.SelectedTool;
+        }
+
+        // Switch to previous tool
+        if(Event.current.type == EventType.keyDown
+        && Event.current.keyCode == KeyCode.Q
+        && ToolsMenu.SelectedTool != prevTool) {
+            int temp = ToolsMenu.SelectedTool;
+            ToolsMenu.SelectedTool = prevTool;
+            prevTool = temp;
         }
 
         HandleUtility.AddDefaultControl(controlId);
@@ -130,7 +158,7 @@ public class AddAndRemoveObjects : Editor {
     public static void RemoveBlock(Vector3 position) {
         for(int i = 0; i < LevelParent.childCount; ++i) {
             float distanceToBlock = Vector3.Distance(LevelParent.GetChild(i).transform.position, position);
-            if(distanceToBlock < 0.1f) {
+            if(distanceToBlock < 0.4f) {
                 //Use Undo.DestroyObjectImmediate to destroy the object and create a proper Undo/Redo step for it
                 Undo.DestroyObjectImmediate(LevelParent.GetChild(i).gameObject);
 
