@@ -15,7 +15,7 @@ public class Inventory : MonoBehaviour {
 
     public List<Items> ItemsList = new List<Items>();
     public List<GameObject> CollectablesList = new List<GameObject>();
-    public List<GameObject> TrapableList = new List<GameObject>();
+    public List<GameObject> InteractableList = new List<GameObject>();
 
     Items Poison = new Items { ID = 1, Model = null, Name = "Poison", Lethal = true };
     Items Key = new Items { ID = 2, Model = null, Name = "Key", Lethal = false };
@@ -25,7 +25,7 @@ public class Inventory : MonoBehaviour {
     {
         //maybe move this so it can be added in collectable script
         CollectablesList.AddRange(GameObject.FindGameObjectsWithTag("Collectable"));
-        TrapableList.AddRange(GameObject.FindGameObjectsWithTag("Trapable"));
+        InteractableList.AddRange(GameObject.FindGameObjectsWithTag("Interactable"));
 
 
     }
@@ -35,7 +35,7 @@ public class Inventory : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("key pressed");
-            //Pickup will determine if you pick it up or trap it
+            //Pickup will determine if you pick it up or interact w/ it
             PickUpItem();
         }
     }
@@ -66,26 +66,34 @@ public class Inventory : MonoBehaviour {
                 }
                 else { Debug.Log("Inventory full!"); }
             }
-            else { TrapItem(); }
+            else { InteractItem(); }
         }
     }
-
-    void TrapItem()
+    void InteractItem()
     {
         Debug.Log("Trap Item Ran");
-        for (int i = 0; i < TrapableList.Count; i++)
+        for (int i = 0; i < InteractableList.Count; i++)
         {
-            if (CheckXDis(transform, TrapableList[i].transform) < 2)
+            if (CheckXDis(transform, InteractableList[i].transform) < 2)
             {
-                if (TrapableList[i].name == "Coffee")
+                if (InteractableList[i].name == "Coffee")
                 {
                     if (ItemsList.Contains(Poison))
                     {
                         ItemsList.Remove(Poison);
                         Debug.Log("Poison Removed");
-                        TrapableList[i].GetComponent<Traps>().lethal = true;
-                        TrapableList[i].GetComponent<Renderer>().material.color = Color.red;
+                        InteractableList[i].GetComponent<Traps>().lethal = true;
+                        InteractableList[i].GetComponent<Renderer>().material.color = Color.red;
                         Debug.Log("Shits lethal bruh");
+                    }
+                }
+                if (InteractableList[i].name == "Door")
+                {
+                    if (ItemsList.Contains(Key))
+                    {
+                        ItemsList.Remove(Key);                      
+                        InteractableList[i].GetComponent<Door>().locked = false;
+                        Debug.Log("Door unlocked");
                     }
                 }
             }

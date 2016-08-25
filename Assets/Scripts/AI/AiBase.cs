@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
+//change the array of targets to a list to change the size
 [RequireComponent(typeof(Controller2D))]
 public class AiBase : Agent {
 
