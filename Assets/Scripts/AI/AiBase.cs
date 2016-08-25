@@ -72,10 +72,14 @@ public class AiBase : Agent {
                     {
                         target = InteractibleLocs[currWayPoint];
                         MoveTo(target.position);
-                        if (CheckXDis(target,transform) < .4)
+                        if (CheckXDis(target,transform) < .5)
                         {
-                            currWayPoint++;
-                            
+                            if (target.GetComponent<Traps>().lethal)
+                            {
+                                Die();
+                                Debug.Log("Dead");
+                            }
+                            else { currWayPoint++; Debug.Log("Continuing on"); }
                         }
                     }
                     break;
@@ -173,9 +177,9 @@ public class AiBase : Agent {
     }
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, wanderRadius);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(wayPoint, .5f);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, .5f);
+        //Gizmos.color = Color.blue;
+        //Gizmos.DrawSphere(wayPoint, .5f);
     }
 }

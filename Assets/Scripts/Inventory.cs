@@ -35,6 +35,7 @@ public class Inventory : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("key pressed");
+            //Pickup will determine if you pick it up or trap it
             PickUpItem();
         }
     }
