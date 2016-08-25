@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour {
     public bool pickUp;
+    public int maxInvSize;
     public struct Items
     {
         public int ID;
         public GameObject Model;
         public string Name;
         public bool Lethal;
-        public bool Collectable;
     }
 
     public List<Items> ItemsList = new List<Items>();
@@ -21,9 +21,6 @@ public class Inventory : MonoBehaviour {
         //maybe move this so it can be added in collectable script
         CollectablesList.AddRange(GameObject.FindGameObjectsWithTag("Collectable"));
 
-        
-        Items Coffee = new Items { ID = 2, Model = null, Name = "Coffee", Lethal = false, Collectable = false };
-
     }
     // Update is called once per frame
     void Update()
@@ -31,25 +28,33 @@ public class Inventory : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("key pressed");
-            for(int i = 0; i < CollectablesList.Count; i++)
+            for (int i = 0; i < CollectablesList.Count; i++)
             {
                 Debug.Log("Collectables looped through");
-                if (CheckXDis(transform,CollectablesList[i].transform) < 2)
+                if (CheckXDis(transform, CollectablesList[i].transform) < 2)
                 {
                     Debug.Log("Distance checked");
-                    if (CollectablesList[i].gameObject.name == ("Poison"))
+                    if (ItemsList.Capacity <= maxInvSize)
                     {
-                        Items Poison = new Items { ID = 1, Model = null, Name = "Poison", Lethal = true, Collectable = true };
-                        ItemsList.Add(Poison);
-                        CollectablesList[i].SetActive(false);
-                        Debug.Log("Poison added");
-                        break;
+                        if (CollectablesList[i].gameObject.name == ("Poison"))
+                        {
+                            Items Poison = new Items { ID = 1, Model = null, Name = "Poison", Lethal = true };
+                            ItemsList.Add(Poison);
+                            CollectablesList[i].SetActive(false);
+                            Debug.Log("Poison added");
+                            break;
+                        }
+                        if (CollectablesList[i].gameObject.name == ("Key"))
+                        {
+                            Items Key = new Items { ID = 2, Model = null, Name = "Key", Lethal = false };
+                            ItemsList.Add(Key);
+                            CollectablesList[i].SetActive(false);
+                            Debug.Log("Key added");
+                            break;
+                        }
                     }
                 }
-            }
-            
-
-            
+            }  
         }
     }
     float CheckXDis(Transform a, Transform b)

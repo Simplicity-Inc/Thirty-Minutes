@@ -74,8 +74,8 @@ public class AiBase : Agent {
                         MoveTo(target.position);
                         if (CheckXDis(target,transform) < .4)
                         {
-                           
-                            Debug.Log("ahhh");
+                            currWayPoint++;
+                            
                         }
                     }
                     break;
