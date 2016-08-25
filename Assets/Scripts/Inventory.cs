@@ -51,7 +51,11 @@ public class Inventory : MonoBehaviour {
                             CollectablesList[i].SetActive(false);
                             Debug.Log("Key added");
                             break;
-                        }
+                        } 
+                    }
+                    else
+                    {
+                        Debug.Log("Inventory full!");
                     }
                 }
             }  
