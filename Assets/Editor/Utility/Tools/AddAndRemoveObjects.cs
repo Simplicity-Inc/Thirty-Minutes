@@ -35,13 +35,13 @@ public class AddAndRemoveObjects : Editor {
         set { EditorPrefs.SetInt("SelectedEditorBlock", value); }
     }
 
-    static LevelBlocks m_LevelBlocks;
+    static LevelBlock m_LevelBlocks;
 
     static AddAndRemoveObjects() {
         SceneView.onSceneGUIDelegate -= OnSceneGUI;
         SceneView.onSceneGUIDelegate += OnSceneGUI;
 
-        m_LevelBlocks = AssetDatabase.LoadAssetAtPath<LevelBlocks>("Assets/Prefab/Level Blocks/LevelBlocks.asset");
+        m_LevelBlocks = AssetDatabase.LoadAssetAtPath<LevelBlock>("Assets/Prefab/Level Blocks/LevelBlocks.asset");
     }
 
     void OnDestory() {
@@ -63,7 +63,7 @@ public class AddAndRemoveObjects : Editor {
         GUI.Box(new Rect(0, 0, 110, sceneView.position.height - 35), GUIContent.none, EditorStyles.textArea);
 
         scrollPosition = GUI.BeginScrollView(new Rect(0, 0, 125, sceneView.position.height - 35),
-         scrollPosition, new Rect(0, 0, 110, 117 * ( blockCount + 1 )), false, true);
+         scrollPosition, new Rect(0, 0, 110, 117 * ( blockCount + 5 )), false, true);
 
         for(blockCount = 0; blockCount < m_LevelBlocks.Blocks.Count; ++blockCount) {
             DrawCustomBlockButtons(blockCount, sceneView.position);

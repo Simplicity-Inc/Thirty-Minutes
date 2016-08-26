@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using UnityEditor.SceneManagement;
 
-[CustomEditor(typeof(LevelBlocks))]
+[CustomEditor(typeof(LevelBlock))]
 public class LevelBlockEditor : Editor {
 
-    LevelBlocks inspec;
+    LevelBlock inspec;
     int selLayer = 0;
 
     public void OnEnable() {
-        inspec = (LevelBlocks)target;
+        inspec = (LevelBlock)target;
     }
 
     public override void OnInspectorGUI() {
@@ -39,6 +40,11 @@ public class LevelBlockEditor : Editor {
                         inspec.Blocks.Add(new LevelBlocksData((GameObject)Resources.Load(dragObj.name)));
                     }
                 }
+
+                EditorUtility.SetDirty(inspec);
+                EditorSceneManager.MarkAllScenesDirty();
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
                 break;
         }
     }
