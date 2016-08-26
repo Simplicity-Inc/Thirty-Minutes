@@ -17,4 +17,8 @@ public class LevelBlocksData {
 [CreateAssetMenu]
 public class LevelBlocks : ScriptableObject {
     public List<LevelBlocksData> Blocks = new List<LevelBlocksData>();
+
+    void OnDestory() {
+        EditorUtility.SetDirty(this);
+    }
 }

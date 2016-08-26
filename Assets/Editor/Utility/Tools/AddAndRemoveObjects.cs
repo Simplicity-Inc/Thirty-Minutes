@@ -63,7 +63,7 @@ public class AddAndRemoveObjects : Editor {
         GUI.Box(new Rect(0, 0, 110, sceneView.position.height - 35), GUIContent.none, EditorStyles.textArea);
 
         scrollPosition = GUI.BeginScrollView(new Rect(0, 0, 125, sceneView.position.height - 35),
-         scrollPosition, new Rect(0, 0, 110, 117 * ( blockCount + 1 )), false, true);
+         scrollPosition, new Rect(0, 0, 110, 117 * ( blockCount + 2 )), false, true);
 
         for(blockCount = 0; blockCount < m_LevelBlocks.Blocks.Count; ++blockCount) {
             DrawCustomBlockButtons(blockCount, sceneView.position);
@@ -95,7 +95,7 @@ public class AddAndRemoveObjects : Editor {
         if(ToolsMenu.SelectedTool == 0) return;
 
         int controlId = GUIUtility.GetControlID(FocusType.Passive);
-        List<Vector2> added = new List<Vector2>();
+        //List<Vector2> added = new List<Vector2>(); Used for determining if a location already has a place
 
         if(( Event.current.type == EventType.mouseDown /*|| Event.current.type == EventType.mouseDrag */)
             && Event.current.button == 0
