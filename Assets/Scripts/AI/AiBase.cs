@@ -5,23 +5,10 @@ using System.Collections.Generic;
 //change the array of targets to a list to change the size
 [RequireComponent(typeof(Controller2D))]
 public class AiBase : Agent {
-
-    public int maxAccesibleFloor;
-    public int minAccesibleFloor;
-
-    protected int maxAlert;
-    protected int minAlert;
-    public int currentAlert;
-
-    public List<GameObject> Targets = new List<GameObject>();
-
     protected Transform target;
-    protected Vector3 wayPoint;
-    public Transform[] InteractibleLocs;
-    private int currWayPoint;
 
-    bool interact;
-    bool isTarget;
+    public List<Transform> wayPointList = new List<Transform>();
+    private int currWayPoint;
 
     public enum AIType { MEDIC, PEDESTRIAN };
     public AIType Type;
@@ -29,7 +16,6 @@ public class AiBase : Agent {
     public Behavior AI;
     protected Controller2D controller;
     public int wanderRadius;
-    Material material;
 
     bool isAlive;
 
@@ -40,9 +26,7 @@ public class AiBase : Agent {
         controller = GetComponent<Controller2D>();
         base.Start();
         isAlive = true;
-        wayPoint = Random.insideUnitCircle * wanderRadius;
         size = GetComponent<Collider2D>().bounds.size;
-        material = GetComponent<Renderer>().material;
         currWayPoint = 0;
     }
 
@@ -57,56 +41,40 @@ public class AiBase : Agent {
         {
             case Behavior.WANDER:
                 {
-                    MoveTo(wayPoint);
-                    //MoveTo(FindClosestElevator().transform.position);
-                    //head to elevator
-                    if (CheckXDis(target,transform) < .4)
-                    {
-                        AI = Behavior.WANDER;
-                    }
                     break;
                 }
             case Behavior.INTERACTABLES:
                 {
-                    if (currWayPoint < InteractibleLocs.Length)
-                    {
-                        target = InteractibleLocs[currWayPoint];
-                        MoveTo(target.position);
-                        if (CheckXDis(target,transform) < .5)
-                        {
-                            if (target.GetComponent<Traps>().lethal)
-                            {
-                                Die();
-                                Debug.Log("Dead");
-                            }
-                            else { currWayPoint++; Debug.Log("Continuing on"); }
-                        }
-                    }
+                    WayPoints();
                     break;
                 }
         }
     }
-    //Needs more work
-    void InteractTest(int waitTime)
+    void WayPoints()
     {
-                                
-    }
-    IEnumerator Interact()
+        if (currWayPoint < wayPointList.Count)
         {
-        //INCOMPLETE NEEDS TO WORK WITH THE ANIMATION
-        //play the animation and check if its trapped
-       // animation.Play("clip");
-        //yield return new WaitForSeconds(animation["clip"].length * animation["clip"].speed);
-        //if (target.GetComponent<Item>())
-        //{
-        //    //kill the target
-
-        //}
-        //else
-        //{
-        //    currWayPoint++;
-        //}
-        yield return new WaitForSeconds(2);
+            target = wayPointList[currWayPoint];
+            string name = target.name;
+            Debug.Log(name);
+            if (wayPointList[currWayPoint].gameObject.activeSelf)
+            {
+                MoveTo(target.position);
+            }
+            else { currWayPoint++; }
+            if (CheckXDis(target, transform) < .5)
+            {
+                if (target.GetComponent<Traps>().lethal)
+                {
+                    Die();
+                }
+                else { currWayPoint++; }
+            }
+            if (currWayPoint >= wayPointList.Count)
+            {
+                currWayPoint = 0;
+            }
+        }
     }
     void MoveTo(Vector3 wayPoint)
     {
@@ -133,8 +101,9 @@ public class AiBase : Agent {
     public void Die()
     {
         //death animation
-        material.color = Color.red;
+        this.gameObject.SetActive(false);
     }
+
     GameObject FindClosestElevator()
     {
         GameObject[] gos;
@@ -153,28 +122,14 @@ public class AiBase : Agent {
             }
         }
         return closest;
-
     }
+
     int DiceRoll(int min, int max)
     {
         int rand;
         rand = Random.Range(min, max);
         return rand;
     }  
-    public void SetCurrentFloor(int floor)
-    {
-        currentFloor = floor;
-    }
-    void SetDesiredFloor()
-    {
-        desiredFloor = DiceRoll(minAccesibleFloor, maxAccesibleFloor);
-    }
-    public int GetDesiredFloor()
-    {
-        int floor;
-        floor = desiredFloor;
-        return floor;
-    }
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
